@@ -1,0 +1,13 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="event_detail_block_timestamp">16sp</dimen>
+    <dimen name="event_detail_block_title">28sp</dimen>
+    <dimen name="event_detail_block_start_time">20sp</dimen>
+    <dimen name="event_detail_block_end_time">20sp</dimen>
+    <dimen name="event_detail_block_time_arrow">36sp</dimen>
+    <dimen name="home_no_activity_pad">20sp</dimen>
+
+    <dimen name="home_tile_image_padding">20sp</dimen>
+</resources>

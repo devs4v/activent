@@ -1,0 +1,14 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    android:id="@+id/events_details_main"
+    android:orientation="vertical">
+
+    <ListView
+        android:id="@+id/home_screen_listing"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+        </ListView>
+
+</LinearLayout>

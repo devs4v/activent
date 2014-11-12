@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- home screen -->
+    <color name="home_current_act_bg">#ffd1d1d1</color>
+    <color name="home_tile_bg">#ff2c3140</color>
+    <color name="home_tile_screen_bg">#FFCEE4F2</color>
+    <color name="home_tile_text">#FFB4CBD9</color>
+
+    <color name="home_current_currently_happening">#FF5D688C</color>
+    <color name="home_current_place">#FF5D688C</color>
+    <color name="home_current_title">#FF2C3140</color>
+    <color name="home_current_day">#FF5D688C</color>
+    <color name="home_current_start">#FF4C5573</color>
+    <color name="home_current_end">#FF4C5573</color>
+
+    <color name="home_current_bg_start">#FFCEE4F2</color>
+    <color name="home_current_bg_end">#ffa7BFCD</color>
+
+
+
+    <!-- Event detail block -->
+    <color name="event_detail_light_grey">#6F6F6F</color>
+    <color name="event_detail_block_bg">#FFFFFF</color>
+    <color name="event_detail_block_title_bg">#2222AA</color>
+    <color name="event_detail_block_title_text">#080808</color>
+    <color name="event_detail_block_bgShadow">#B6B6B6</color>
+    <color name="event_detail_block_timestamp_bg">#FFFFFF</color>
+    <color name="event_detail_block_timestamp_text">#222222</color>
+    <color name="event_detail_block_start_time_bg">#FFFFFF</color>
+    <color name="event_detail_block_start_time_text">#A8A8A8</color>
+    <color name="event_detail_block_end_time_bg">#FFFFFF</color>
+    <color name="event_detail_block_end_time_text">#A8A8A8</color>
+
+
+
+
+</resources>

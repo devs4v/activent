@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/home_current_act_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/home_no_activity"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:padding="@dimen/home_no_activity_pad">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/home_screen_no_activity"
+            android:gravity="center"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="15sp"
+            android:text="@string/home_screen_check_agenda"/>
+        </LinearLayout>
+
+    <ListView
+        android:id="@+id/home_current_event_list"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:visibility="visible"/>
+
+</LinearLayout>

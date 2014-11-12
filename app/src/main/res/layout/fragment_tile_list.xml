@@ -1,0 +1,140 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20sp">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:weightSum="2">
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/grid_tile_left">
+
+                <ImageView
+                    android:id="@+id/home_screen_tile_signin_img"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/tile_sign_in"
+                    android:padding="@dimen/home_tile_image_padding"/>
+                <TextView
+                    android:id="@+id/home_screen_tile_signin_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_alignBottom="@id/home_screen_tile_signin_img"
+                    android:layout_marginBottom="5sp"
+                    android:textSize="30sp"
+                    android:textColor="@color/home_tile_text"
+                    android:shadowColor="#FFFFFF"
+                    android:shadowRadius="10.0"
+                    android:text="@string/home_tile_sign_in"/>
+            </RelativeLayout>
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/grid_tile_right"
+                android:layout_gravity="right">
+
+                <ImageView
+                    android:id="@+id/home_screen_tile_agenda_img"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/tile_agenda"
+                    android:padding="@dimen/home_tile_image_padding"/>
+                <TextView
+                    android:id="@+id/home_screen_tile_agenda_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_alignBottom="@id/home_screen_tile_agenda_img"
+                    android:layout_marginBottom="5sp"
+                    android:textSize="30sp"
+                    android:textColor="@color/home_tile_text"
+                    android:shadowColor="#FFFFFF"
+                    android:shadowRadius="10.0"
+                    android:text="@string/home_tile_agenda"/>
+            </RelativeLayout>
+        </TableRow>
+
+        <!-- Row 2 -->
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true" android:weightSum="2">
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/grid_tile_left">
+
+                <ImageView
+                    android:id="@+id/home_screen_tile_places_img"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/tile_map_pin"
+                    android:padding="@dimen/home_tile_image_padding"/>
+                <TextView
+                    android:id="@+id/home_screen_tile_places_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_alignBottom="@id/home_screen_tile_places_img"
+                    android:layout_marginBottom="5sp"
+                    android:textSize="30sp"
+                    android:textColor="@color/home_tile_text"
+                    android:shadowColor="#FFFFFF"
+                    android:shadowRadius="10.0"
+                    android:text="@string/home_tile_places"/>
+            </RelativeLayout>
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/grid_tile_right"
+                android:layout_gravity="right">
+
+                <ImageView
+                    android:id="@+id/home_screen_tile_info_img"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/tile_info"
+                    android:padding="@dimen/home_tile_image_padding"/>
+                <TextView
+                    android:id="@+id/home_screen_tile_info_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_alignBottom="@id/home_screen_tile_info_img"
+                    android:layout_marginBottom="5sp"
+                    android:textSize="30sp"
+                    android:textColor="@color/home_tile_text"
+                    android:shadowColor="#FFFFFF"
+                    android:shadowRadius="10.0"
+                    android:text="@string/home_tile_info"/>
+            </RelativeLayout>
+        </TableRow>
+        </TableLayout>
+
+</LinearLayout>

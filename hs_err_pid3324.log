@@ -1,0 +1,122 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (malloc) failed to allocate 368656 bytes for Chunk::new
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   In 32 bit mode, the process size limit was hit
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Use 64 bit Java on a 64 bit OS
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (allocation.cpp:323), pid=3324, tid=3588
+#
+# JRE version:  (7.0_51-b13) (build )
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (24.51-b03 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000000002d4d800):  JavaThread "Unknown thread" [_thread_in_vm, id=3588, stack(0x0000000002be0000,0x0000000002ce0000)]
+
+Stack: [0x0000000002be0000,0x0000000002ce0000]
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+
+Other Threads:
+
+=>0x0000000002d4d800 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=3588, stack(0x0000000002be0000,0x0000000002ce0000)]
+
+VM state:not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (0 events):
+No events
+
+
+Dynamic libraries:
+0x00007ff734a90000 - 0x00007ff734ac3000 	C:\PROGRA~1\Java\JDK17~1.0_5\bin\java.exe
+0x00007ffa220e0000 - 0x00007ffa22286000 	C:\Windows\SYSTEM32\ntdll.dll
+0x00007ffa20160000 - 0x00007ffa2029a000 	C:\Windows\system32\KERNEL32.DLL
+0x00007ffa1f860000 - 0x00007ffa1f96f000 	C:\Windows\system32\KERNELBASE.dll
+0x00007ffa1def0000 - 0x00007ffa1df78000 	C:\Windows\system32\apphelp.dll
+0x00007ffa16270000 - 0x00007ffa162bf000 	C:\Windows\AppPatch\AppPatch64\AcGenral.DLL
+0x00007ffa21b50000 - 0x00007ffa21bf7000 	C:\Windows\system32\msvcrt.dll
+0x00007ffa1f310000 - 0x00007ffa1f33b000 	C:\Windows\SYSTEM32\SspiCli.dll
+0x00007ffa202c0000 - 0x00007ffa20311000 	C:\Windows\system32\SHLWAPI.dll
+0x00007ffa21f60000 - 0x00007ffa220d1000 	C:\Windows\system32\USER32.dll
+0x00007ffa20320000 - 0x00007ffa20498000 	C:\Windows\system32\ole32.dll
+0x00007ffa20680000 - 0x00007ffa21a8f000 	C:\Windows\system32\SHELL32.dll
+0x00007ffa1eaf0000 - 0x00007ffa1eb0e000 	C:\Windows\SYSTEM32\USERENV.dll
+0x00007ffa21d40000 - 0x00007ffa21de5000 	C:\Windows\system32\ADVAPI32.dll
+0x00007ffa151e0000 - 0x00007ffa151fb000 	C:\Windows\SYSTEM32\MPR.dll
+0x00007ffa20020000 - 0x00007ffa20157000 	C:\Windows\system32\RPCRT4.dll
+0x00007ffa1ffc0000 - 0x00007ffa20017000 	C:\Windows\SYSTEM32\sechost.dll
+0x00007ffa1fc20000 - 0x00007ffa1fdf6000 	C:\Windows\SYSTEM32\combase.dll
+0x00007ffa1fe70000 - 0x00007ffa1ffb4000 	C:\Windows\system32\GDI32.dll
+0x00007ffa1f460000 - 0x00007ffa1f474000 	C:\Windows\SYSTEM32\profapi.dll
+0x00007ffa1d610000 - 0x00007ffa1d6af000 	C:\Windows\SYSTEM32\SHCORE.dll
+0x00007ffa20640000 - 0x00007ffa20674000 	C:\Windows\system32\IMM32.DLL
+0x00007ffa21c00000 - 0x00007ffa21d39000 	C:\Windows\system32\MSCTF.dll
+0x00007ffa1c930000 - 0x00007ffa1cb8a000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.9600.17031_none_6242a4b3ecbb55a1\COMCTL32.dll
+0x0000000056350000 - 0x0000000056422000 	C:\PROGRA~1\Java\JDK17~1.0_5\jre\bin\msvcr100.dll
+0x0000000056710000 - 0x0000000056ed9000 	C:\PROGRA~1\Java\JDK17~1.0_5\jre\bin\server\jvm.dll
+0x00007ffa19900000 - 0x00007ffa19909000 	C:\Windows\SYSTEM32\WSOCK32.dll
+0x00007ffa1c910000 - 0x00007ffa1c92f000 	C:\Windows\SYSTEM32\WINMM.dll
+0x00007ffa202a0000 - 0x00007ffa202a7000 	C:\Windows\system32\PSAPI.DLL
+0x00007ffa21e60000 - 0x00007ffa21eb8000 	C:\Windows\system32\WS2_32.dll
+0x00007ffa1bfb0000 - 0x00007ffa1bfda000 	C:\Windows\SYSTEM32\WINMMBASE.dll
+0x00007ffa1fe00000 - 0x00007ffa1fe09000 	C:\Windows\system32\NSI.dll
+0x00007ffa1f530000 - 0x00007ffa1f57a000 	C:\Windows\SYSTEM32\cfgmgr32.dll
+0x00007ffa1e2e0000 - 0x00007ffa1e306000 	C:\Windows\SYSTEM32\DEVOBJ.dll
+0x00000000570b0000 - 0x00000000570bf000 	C:\PROGRA~1\Java\JDK17~1.0_5\jre\bin\verify.dll
+0x0000000057080000 - 0x00000000570a8000 	C:\PROGRA~1\Java\JDK17~1.0_5\jre\bin\java.dll
+0x0000000057060000 - 0x0000000057075000 	C:\PROGRA~1\Java\JDK17~1.0_5\jre\bin\zip.dll
+
+VM Arguments:
+jvm_args: -Xmx1024M -Xss1m -Djava.ext.dirs=C:\android\android-sdk_r23.0.2-windows\android-sdk-windows\build-tools\21.1.0\lib 
+java_command: C:\android\android-sdk_r23.0.2-windows\android-sdk-windows\build-tools\21.1.0\lib\dx.jar --dex --output C:\Users\Shivam\Androidworkspace\Activent\app\build\intermediates\pre-dexed\debug\classes-30f71676ad766a033aa2a139940d2c8c54b4ed89.jar C:\Users\Shivam\Androidworkspace\Activent\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.0\classes.jar
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=C:\Program Files\Java\jdk1.7.0_51
+CLASSPATH=C:\Users\Shivam\Eclipse\Java\extraJARs\javamop\bin;
+PATH=C:\Program Files\Java\jdk1.7.0_51\bin;C:\MinGW\bin\;C:\Python27\;C:\Python27\Scripts;C:\Windows\SYSTEM32;C:\Windows;C:\Windows\SYSTEM32\WBEM;C:\Windows\SYSTEM32\WINDOWSPOWERSHELL\V1.0\;C:\PROGRAM FILES (X86)\WINDOWS LIVE\SHARED;C:\Program Files\WIDCOMM\Bluetooth Software\;C:\Program Files\WIDCOMM\Bluetooth Software\syswow64;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;C:\Python27\Lib\site-packages\Django-1.8.dev20140502173322-py2.7.egg\django\bin;C:\Program Files\Sublime Text 3\;C:\Program Files\Dell\DW WLAN Card;C:\adt-bundle-windows-x86_64-20140702\sdk\platform-tools\;C:\adt-bundle-windows-x86_64-20140702\sdk\tools\;C:\Users\Shivam\Eclipse\Java\extraJARs\javamop\bin;C:\Users\Shivam\AppData\Roaming\Python\Scripts;C:\Program Files (x86)\Google\google_appengine\
+USERNAME=Shivam
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 37 Stepping 5, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 8 , 64 bit Build 9200 
+
+CPU:total 4 (2 cores per cpu, 2 threads per core) family 6 model 37 stepping 5, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, ht, tsc, tscinvbit
+
+Memory: 4k page, physical 3988148k(286856k free), swap 5036724k(5240k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (24.51-b03) for windows-amd64 JRE (1.7.0_51-b13), built on Dec 18 2013 18:40:56 by "java_re" with unknown MS VC++:1600
+
+time: Mon Nov 10 20:40:40 2014
+elapsed time: 0 seconds
+

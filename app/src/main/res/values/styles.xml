@@ -1,0 +1,11 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textViewStyle">@style/activent_serif_light</item>
+    </style>
+
+    <style name="activent_serif_light">
+        <item name="android:typeface">sans</item>
+    </style>
+</resources>

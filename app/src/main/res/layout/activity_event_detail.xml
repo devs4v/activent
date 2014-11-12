@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_height="match_parent"
+android:layout_width="match_parent"
+android:id="@+id/events_details_main">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_image"
+        android:scaleType="centerCrop"
+        android:layout_alignBottom="@+id/event_detail_container"
+        android:layout_alignTop="@+id/event_detail_container"
+        android:layout_alignLeft="@+id/event_detail_container"
+        android:layout_alignRight="@+id/event_detail_container"/>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" android:id="@+id/event_detail_container"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        tools:context="com.agnostix.activent.activent.EventDetailActivity"
+        tools:ignore="MergeRootFrame" />
+    </RelativeLayout>
