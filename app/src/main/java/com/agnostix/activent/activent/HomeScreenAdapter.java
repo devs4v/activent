@@ -33,6 +33,7 @@ public class HomeScreenAdapter extends BaseAdapter {
 
     public interface HomeScreenItemClickListener{
         public void onHomeScreenItemClick(View v, int resid);
+        public void setUIObjects(View v, int objectToBeAdded);
     }
 
     public HomeScreenAdapter(Context context, Activity activity, ArrayList<String[]> eventItems){
@@ -73,38 +74,14 @@ public class HomeScreenAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view;
         if(convertView == null){
-            Log.d("homescreenadapter", "homescreenadapter getview called with" + String.valueOf(position));
             if(position == 0){
                 view = inflater.inflate(R.layout.hello_button, null);
                 Button button = (Button) view.findViewById(R.id.hello_button);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        callbackListener.onHomeScreenItemClick(v, R.id.hello_button);
-                    }
-                });
+                callbackListener.setUIObjects(view, R.id.hello_button);
 
-                button = (Button)view.findViewById(R.id.add_username);
-
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String username="Chaturvedi";
-                        ((HomeScreen)activity).setUsername(username);
-                    }
-                });
-                button = (Button)view.findViewById(R.id.clear_username);
-
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String username="Chaturvedi";
-                        ((HomeScreen)activity).deleteUsername();
-                    }
-                });
-                //insert the hello button open activity command
             }else if(position == footerItem+1){
                 view = inflater.inflate(R.layout.fragment_tile_list, null);
+
             }else{
                 view = inflater.inflate(R.layout.home_current_event_item, null);
 

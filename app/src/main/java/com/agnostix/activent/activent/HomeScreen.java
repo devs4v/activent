@@ -19,17 +19,16 @@ import android.widget.Toast;
 
 public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.HomeScreenItemClickListener{
     WifiChangeReceiver wifiChangeReceiver = new WifiChangeReceiver();
+    private String receivedUsername;
+    public Button hello_button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
-        if(getUsername().equals("none")){
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
-            this.finish();
-            return;
-        }
+
+        this.receivedUsername = getIntent().getStringExtra(LoginActivity.EXTRA_LOGIN_USERNAME);
 
         ListView listView = (ListView)findViewById(R.id.home_screen_listing);
         HomeScreenAdapter homeScreenAdapter = new HomeScreenAdapter(this, HomeScreen.this, null);
@@ -47,13 +46,19 @@ public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.H
         getMenuInflater().inflate(R.menu.menu_home_screen, menu);
 
         MenuItem menuItem = menu.findItem(R.id.action_events);
-        String username = getUsername();
-        if(username != "none"){
-            menuItem.setTitle("Signed in as: " + username);
-        }
+        //if(username != "none"){
+            menuItem.setTitle("Signed in as: " + receivedUsername);
+        //}
         return true;
     }
 
+
+    public void onStart(){
+        super.onStart();
+        if(hello_button != null){
+            hello_button.setText(receivedUsername);
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -74,43 +79,9 @@ public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.H
         return super.onOptionsItemSelected(item);
     }
 
-
     public void onStop(){
         super.onStop();
         unregisterReceiver(wifiChangeReceiver);
-    }
-
-
-    public String getUsername(){
-        SharedPreferences sharedPreferences = HomeScreen.this.getPreferences(Context.MODE_PRIVATE);
-        String defaultValue = "none";
-        String resourceUsername = getResources().getString(R.string.pref_key_username);
-
-        String value = sharedPreferences.getString(resourceUsername, defaultValue);
-
-        return value;
-    }
-
-    public void setUsername(String username){
-        SharedPreferences sharedPreferences = HomeScreen.this.getPreferences(Context.MODE_PRIVATE);
-
-        String resourceUsername = getResources().getString(R.string.pref_key_username);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putString(resourceUsername, username);
-        editor.commit();
-
-    }
-
-    public void deleteUsername(){
-        SharedPreferences sharedPreferences = HomeScreen.this.getPreferences(Context.MODE_PRIVATE);
-
-        String resourceUsername = getResources().getString(R.string.pref_key_username);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.remove(resourceUsername);
-        editor.commit();
-
     }
 
     @Override
@@ -125,4 +96,22 @@ public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.H
                 break;
         }
     }
+
+    @Override
+    public void setUIObjects(View v, int objectToBeAdded) {
+        switch(objectToBeAdded){
+            case R.id.hello_button:
+                this.hello_button = (Button)v.findViewById(R.id.hello_button);
+                this.hello_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String[] placeInfo = WifiChangeReceiver.getMacAddress(getApplicationContext(), null);
+                        ((Button)v).setText(placeInfo[4] + "has " + placeInfo[2]);
+                    }
+                });
+                break;
+        }
+
+    }
+
 }

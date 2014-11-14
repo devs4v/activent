@@ -26,11 +26,6 @@
         <activity
             android:name="com.agnostix.activent.activent.HomeScreen"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.agnostix.activent.activent.EventListActivity"
@@ -53,6 +48,11 @@
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:theme="@style/TransparentActionBarTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <meta-data

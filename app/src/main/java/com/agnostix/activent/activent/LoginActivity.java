@@ -7,6 +7,7 @@ import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Canvas;
@@ -50,15 +51,10 @@ import java.util.Random;
  */
 public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<Cursor> {
 
+    public static final String EXTRA_LOGIN_USERNAME = "activent.login.username";
 
     int[] backgrounds = new int[]{R.drawable.login_bg_1, R.drawable.login_bg_2, R.drawable.login_bg_3, R.drawable.login_bg_4};
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+
 
     // UI references.
 
@@ -74,6 +70,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
         //setTheme(R.style.TransparentActionBarTheme);
         setContentView(R.layout.activity_login);
+
 
         LinearLayout mainLayout = (LinearLayout)findViewById(R.id.login_main_layout);
         Random r = new Random();
@@ -169,6 +166,11 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         //mSignOutButtons.setVisibility(connected ? View.VISIBLE : View.GONE);
         mPlusSignInButton.setVisibility(connected ? View.GONE : View.VISIBLE);
         //mEmailLoginFormView.setVisibility(connected ? View.GONE : View.VISIBLE);
+        if(connected){
+            Intent intent = new Intent(this, HomeScreen.class);
+            intent.putExtra(EXTRA_LOGIN_USERNAME, getPlusClient().getAccountName());
+            startActivity(intent);
+        }
     }
 
     @Override

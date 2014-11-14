@@ -23,6 +23,7 @@ public class WifiChangeReceiver extends BroadcastReceiver {
 
     private static final int NOTIF_ID = 0;
     private static DBHelper dbCon;
+    private static String lastMAC = null;
 
     public static String[] getMacAddress(Context context, Intent intent){
         String[] pInfo = new String[5];
@@ -60,10 +61,23 @@ public class WifiChangeReceiver extends BroadcastReceiver {
 
         String[] placeInfo = getMacAddress(context, intent);
 
+        String macAddress = placeInfo[4];
+        if(lastMAC == null){
+            lastMAC = macAddress;
+        }else{
+            if(macAddress.equals(lastMAC)){
+                return;
+            }
+        }
+
+        generateNotification(context, macAddress);
+    }
+
+    public void generateNotification(Context context, String macAddress){
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.abc_ic_go_search_api_mtrl_alpha)
+                .setSmallIcon(R.drawable.activent_logo_small)
                 .setContentTitle("Connected to new AP!")
-                .setContentText("Currently at: "+ placeInfo[2]);
+                .setContentText("Currently at: "+ macAddress);
 
         Intent resultIntent = new Intent(context, HomeScreen.class);
 
@@ -73,7 +87,7 @@ public class WifiChangeReceiver extends BroadcastReceiver {
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
                 0,
                 PendingIntent.FLAG_UPDATE_CURRENT
-                );
+        );
         notificationBuilder.setContentIntent(resultPendingIntent);
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
