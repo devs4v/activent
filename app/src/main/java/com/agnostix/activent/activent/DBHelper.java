@@ -19,6 +19,11 @@ public class DBHelper extends SQLiteOpenHelper {
         public static final String C_RADDR = "router_address";
         public static final String C_PLACE = "router_place";
         public static final String C_COARSE_PLACE = "router_coarse_position";
+
+        public static final int _ID_INDEX = 0;
+        public static final int C_RADDR_INDEX = 1;
+        public static final int C_PLACE_INDEX = 2;
+        public static final int C_COARSE_PLACE_INDEX  = 3;
     }
 
     public static abstract class eventEntry implements BaseColumns{
@@ -28,6 +33,16 @@ public class DBHelper extends SQLiteOpenHelper {
         public static final String C_START_TIME = "event_start_time";
         public static final String C_END_TIME = "event_end_time";
         public static final String C_PLACE = "event_place";
+        public static final String C_THREAD_ID = "thread_id";
+
+
+        public static final int C_TITLE_INDEX = 0;
+        public static final int C_DAY_INDEX = 1;
+        public static final int C_START_TIME_INDEX  = 2;
+        public static final int C_END_TIME_INDEX  = 3;
+        public static final int C_PLACE_INDEX  = 4;
+        public static final int C_THREAD_ID_INDEX = 5;
+
     }
 
     // Database Version
@@ -60,7 +75,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     + eventEntry.C_DAY + DATE_TYPE + SEP
                     + eventEntry.C_START_TIME + DATE_TYPE + SEP
                     + eventEntry.C_END_TIME + DATE_TYPE + SEP
-                    + eventEntry.C_PLACE + TEXT_TYPE
+                    + eventEntry.C_PLACE + TEXT_TYPE + SEP
+                    + eventEntry.C_THREAD_ID + TEXT_TYPE
                     + " );";
 
     private static final String SQL_DELETE_MAC_TABLE =
@@ -131,13 +147,65 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if(cursor.getCount() != 0){
             cursor.moveToFirst();
-            long itemid = cursor.getLong(cursor.getColumnIndexOrThrow(macAddressEntry._ID));
-            placeInfo[0] = String.valueOf(itemid);
-            placeInfo[1] = cursor.getString(cursor.getColumnIndexOrThrow(macAddressEntry.C_RADDR));
-            placeInfo[2] = cursor.getString(cursor.getColumnIndexOrThrow(macAddressEntry.C_PLACE));
-            placeInfo[3] = cursor.getString(cursor.getColumnIndexOrThrow(macAddressEntry.C_COARSE_PLACE));
+            long item_id = cursor.getLong(cursor.getColumnIndexOrThrow(macAddressEntry._ID));
+            placeInfo[macAddressEntry._ID_INDEX] = String.valueOf(item_id);
+            placeInfo[macAddressEntry.C_RADDR_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(macAddressEntry.C_RADDR));
+            placeInfo[macAddressEntry.C_PLACE_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(macAddressEntry.C_PLACE));
+            placeInfo[macAddressEntry.C_COARSE_PLACE_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(macAddressEntry.C_COARSE_PLACE));
         }
 
         return placeInfo;
+    }
+
+    public void addNewActivityEntry(String[] eventDetails){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues entryValues = new ContentValues();
+
+        entryValues.put(eventEntry.C_TITLE, eventDetails[eventEntry.C_TITLE_INDEX]);
+        entryValues.put(eventEntry.C_DAY, eventDetails[eventEntry.C_DAY_INDEX]);
+        entryValues.put(eventEntry.C_START_TIME, eventDetails[eventEntry.C_START_TIME_INDEX]);
+        entryValues.put(eventEntry.C_END_TIME, eventDetails[eventEntry.C_END_TIME_INDEX]);
+        entryValues.put(eventEntry.C_PLACE, eventDetails[eventEntry.C_PLACE_INDEX]);
+        entryValues.put(eventEntry.C_THREAD_ID, eventDetails[eventEntry.C_THREAD_ID_INDEX]);
+
+        db.insert(eventEntry.TABLE_NAME, "null", entryValues);
+    }
+
+
+    public String[] getActivityEntry(int eventID){
+        String[] activityEntry = new String[6];
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] projection = {
+                eventEntry.C_TITLE,
+                eventEntry.C_DAY,
+                eventEntry.C_START_TIME,
+                eventEntry.C_END_TIME,
+                eventEntry.C_PLACE,
+                eventEntry.C_THREAD_ID
+        };
+
+        String selection = macAddressEntry.C_RADDR + "=?";
+        String[] selectionArgs = new String[]{String.valueOf(eventID)};
+        Cursor cursor = db.query(
+                macAddressEntry.TABLE_NAME,
+                projection,
+                selection, selectionArgs,
+                null, null,
+                null
+        );
+
+        if(cursor.getCount() == 1){
+            cursor.moveToFirst();
+            activityEntry[eventEntry.C_TITLE_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(eventEntry.C_TITLE));
+            activityEntry[eventEntry.C_DAY_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(eventEntry.C_DAY));
+            activityEntry[eventEntry.C_START_TIME_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(eventEntry.C_START_TIME));
+            activityEntry[eventEntry.C_END_TIME_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(eventEntry.C_END_TIME));
+            activityEntry[eventEntry.C_PLACE_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(eventEntry.C_PLACE));
+            activityEntry[eventEntry.C_THREAD_ID_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(eventEntry.C_THREAD_ID));
+        }
+
+        return activityEntry;
     }
 }
