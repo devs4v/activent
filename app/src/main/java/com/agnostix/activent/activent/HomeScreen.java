@@ -24,6 +24,13 @@ public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.H
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
+        if(getUsername().equals("none")){
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            this.finish();
+            return;
+        }
+
         ListView listView = (ListView)findViewById(R.id.home_screen_listing);
         HomeScreenAdapter homeScreenAdapter = new HomeScreenAdapter(this, HomeScreen.this, null);
         listView.setAdapter(homeScreenAdapter);

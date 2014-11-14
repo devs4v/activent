@@ -5,7 +5,23 @@
         <item name="android:textViewStyle">@style/activent_serif_light</item>
     </style>
 
+    <style name="TransparentActionBarTheme" parent="AppTheme">
+        <item name="android:actionBarStyle">@style/TransparentActionBar</item>
+        <item name="android:windowActionBarOverlay">true</item>
+
+        <!-- for support -->
+        <item name="actionBarStyle">@style/TransparentActionBar</item>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
     <style name="activent_serif_light">
         <item name="android:typeface">sans</item>
+    </style>
+
+    <style name="TransparentActionBar">
+        <item name="android:background">@color/transparent_action_bar</item>
+        <item name="android:shadowRadius">0</item>
+
+        <item name="background">@color/transparent_action_bar</item>
     </style>
 </resources>

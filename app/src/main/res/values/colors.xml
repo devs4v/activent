@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- action bad -->
+    <color name="transparent_action_bar">#00000000</color>
+    <color name="activent_bg">#88FFFFFF</color>
+
     <!-- home screen -->
     <color name="home_current_act_bg">#ffd1d1d1</color>
     <color name="home_tile_bg">#ff2c3140</color>
