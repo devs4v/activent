@@ -100,20 +100,33 @@ public class LoginActivity extends PlusBaseActivity{
 
         mProgressView = findViewById(R.id.login_progress);
 
-    }
-
-    public void onStart(){
-        super.onStart();
-
         Intent receivedIntent = getIntent();
         if (receivedIntent!=null){
             if(receivedIntent.hasExtra(HomeScreen.EXTRA_SIGN_OUT)){
                 Log.d("LoginActivity", "Received the sign out intent");
-                signOut();
+                setPendingSignOut();
             }else{
                 Log.d("LoginActivity", "No intent");
             }
         }
+
+        Button signOutButton = (Button)findViewById(R.id.sign_out_button);
+        signOutButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signOut();
+            }
+        });
+    }
+
+    public void onStart(){
+        super.onStart();
+    }
+
+    public void onResume(){
+        super.onResume();
+
+
     }
 
     /**
@@ -182,11 +195,12 @@ public class LoginActivity extends PlusBaseActivity{
 
         mPlusSignInButton.setVisibility(connected ? View.GONE : View.VISIBLE);
         //mEmailLoginFormView.setVisibility(connected ? View.GONE : View.VISIBLE);
-        if(connected){
+        /*if(connected){
             Intent intent = new Intent(this, HomeScreen.class);
             intent.putExtra(EXTRA_LOGIN_USERNAME, getPlusClient().getAccountName());
             startActivity(intent);
-        }
+            this.finish();
+        }*/
     }
 
     @Override
@@ -198,6 +212,7 @@ public class LoginActivity extends PlusBaseActivity{
 
     @Override
     protected void onPlusClientSignOut() {
+        Toast.makeText(getApplicationContext(), "Account sign out!", Toast.LENGTH_SHORT).show();
     }
 
     /**

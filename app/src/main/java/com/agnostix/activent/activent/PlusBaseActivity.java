@@ -40,6 +40,8 @@ public abstract class PlusBaseActivity extends ActionBarActivity
     private ConnectionResult mConnectionResult;
 
 
+    protected boolean pendingSignOut = false;
+
     /**
      * Called when the {@link PlusClient} revokes access to this app.
      */
@@ -67,6 +69,11 @@ public abstract class PlusBaseActivity extends ActionBarActivity
      * need to be updated.
      */
     protected abstract void updateConnectButtonState();
+
+
+    protected void setPendingSignOut(){
+        pendingSignOut = true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +119,11 @@ public abstract class PlusBaseActivity extends ActionBarActivity
         if (!mPlusClient.isConnected() && !mPlusClient.isConnecting()) {
             mPlusClient.connect();
         }
+
+        if(pendingSignOut){
+            signOut();
+            pendingSignOut = false;
+        }
     }
 
     /**
@@ -130,11 +142,13 @@ public abstract class PlusBaseActivity extends ActionBarActivity
     public void signOut() {
 
         // We only want to sign out if we're connected.
+
         if (mPlusClient.isConnected()) {
             // Clear the default account in order to allow the user to potentially choose a
             // different account from the account chooser.
             mPlusClient.clearDefaultAccount();
 
+            Log.d("Plus Base", "cleared default account");
             // Disconnect from Google Play Services, then reconnect in order to restart the
             // process from scratch.
             initiatePlusClientDisconnect();
