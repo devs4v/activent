@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,9 +19,16 @@ import android.widget.Toast;
 
 
 public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.HomeScreenItemClickListener{
+
+    public static final String EXTRA_SIGN_OUT = "activent.login.sign.out";
+
     WifiChangeReceiver wifiChangeReceiver = new WifiChangeReceiver();
     private String receivedUsername;
-    public Button hello_button;
+    private Button hello_button;
+    private View tile_sign_in;
+    private View tile_agenda;
+    private View tile_places;
+    private View tile_info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,26 +61,22 @@ public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.H
     }
 
 
-    public void onStart(){
-        super.onStart();
-        if(hello_button != null){
-            hello_button.setText(receivedUsername);
-        }
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_settings:
                 return true;
             case R.id.action_events:
                 Intent intent = new Intent(getApplicationContext(), EventListActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.action_sign:
+                Intent intent1 = new Intent(getApplicationContext(), LoginActivity.class);
+                intent1.putExtra(EXTRA_SIGN_OUT, "sign_out");
+                startActivity(intent1);
+                this.finish();
                 break;
         }
 
@@ -81,7 +85,11 @@ public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.H
 
     public void onStop(){
         super.onStop();
-        unregisterReceiver(wifiChangeReceiver);
+        try{
+            unregisterReceiver(wifiChangeReceiver);
+        }catch(Exception e){
+            Log.d("HomeScreen", "No Receiver Registered!");
+        }
     }
 
     @Override
@@ -107,6 +115,46 @@ public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.H
                     public void onClick(View v) {
                         String[] placeInfo = WifiChangeReceiver.getMacAddress(getApplicationContext(), null);
                         ((Button)v).setText(placeInfo[4] + "has " + placeInfo[2]);
+                    }
+                });
+                break;
+            case R.id.home_screen_tile_agenda:
+                this.tile_agenda = v.findViewById(R.id.home_screen_tile_agenda);
+                this.tile_agenda.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getApplicationContext(), EventListActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                break;
+            case R.id.home_screen_tile_sign_in:
+                this.tile_sign_in = v.findViewById(R.id.home_screen_tile_sign_in);
+                this.tile_sign_in.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Intent intent = new Intent(getApplicationContext(), EventListActivity.class);
+                        //startActivity(intent);
+                        Toast.makeText(getApplicationContext(), "You are already signed in!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                break;
+            case R.id.home_screen_tile_places:
+                this.tile_places = v.findViewById(R.id.home_screen_tile_places);
+                this.tile_places.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getApplicationContext(), PlacesActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                break;
+            case R.id.home_screen_tile_info:
+                this.tile_agenda = v.findViewById(R.id.home_screen_tile_info);
+                this.tile_agenda.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getApplicationContext(), "Created by the Agnostix Team.\nThank you for using!", Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;

@@ -3,11 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".HomeScreen">
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="80"
         app:showAsAction="never" />
     <item android:id="@+id/action_events"
         android:title="All Upcoming Events"
-        android:orderInCategory="80"
+        android:orderInCategory="60"
+        android:icon="@drawable/tile_agenda"
+        app:showAsAction="never"/>
+    <item android:id="@+id/action_sign"
+        android:title="Sign out"
+        android:orderInCategory="100"
         android:icon="@drawable/tile_agenda"
         app:showAsAction="never"/>
 </menu>

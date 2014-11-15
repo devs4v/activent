@@ -16,8 +16,6 @@
     <string name="home_tile_places">Places</string>
     <string name="home_tile_info">Info</string>
     <string name="home_top_currently_happening">Currently Happening</string>
-
-
     <string name="dummy_text_place">C01</string>
     <string name="dummy_text_day">THU 9 NOV</string>
     <string name="dummy_text_time">9:30 PM</string>
@@ -29,4 +27,9 @@
     <string name="pref_key_username">pref_key_username</string>
     <string name="pref_key_email">pref_key_email</string>
     <string name="pref_key_db_exist">pref_key_db_exist</string>
+    <string name="title_activity_places">Places</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
 </resources>

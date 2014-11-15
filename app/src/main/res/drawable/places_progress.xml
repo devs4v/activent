@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <bitmap android:src="@drawable/places_level_bg"/>
+    </item>
+    <item>
+        <clip
+            android:clipOrientation="vertical"
+            android:gravity="bottom"
+            android:drawable="@drawable/places_level_fg"/>
+    </item>
+</layer-list>

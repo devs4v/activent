@@ -32,13 +32,9 @@
 
             <com.google.android.gms.common.SignInButton android:id="@+id/plus_sign_in_button"
                 android:layout_width="match_parent" android:layout_height="wrap_content" />
-            <Button
-                android:id="@+id/plus_disconnect_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/plus_disconnect"/>
 
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

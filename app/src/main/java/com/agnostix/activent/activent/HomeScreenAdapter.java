@@ -42,6 +42,7 @@ public class HomeScreenAdapter extends BaseAdapter {
         this.activity = activity;
         if(events == null){ //dummy data to show something
             events = new ArrayList<String[]>();
+            //TODO add an AsyncTask that fetches the current happening events info from the database
             events.add(new String[]{"Seminar", "thu nov 9", "3:30pm", "5:30pm", "C01"});
             //events.add(new String[]{"Spicmacay", "thu nov 9", "3:30pm", "5:30pm", "C21"});
             //events.add(new String[]{"Project Meeting", "thu nov 9", "3:30pm", "5:30pm", "library"});
@@ -75,14 +76,22 @@ public class HomeScreenAdapter extends BaseAdapter {
         View view;
         if(convertView == null){
             if(position == 0){
+                //The top row containing dumm button
+                //removed from deployment
                 view = inflater.inflate(R.layout.hello_button, null);
                 Button button = (Button) view.findViewById(R.id.hello_button);
                 callbackListener.setUIObjects(view, R.id.hello_button);
 
             }else if(position == footerItem+1){
+                //The last row needs to be the tiles
                 view = inflater.inflate(R.layout.fragment_tile_list, null);
+                callbackListener.setUIObjects(view, R.id.home_screen_tile_sign_in);
+                callbackListener.setUIObjects(view, R.id.home_screen_tile_agenda);
+                callbackListener.setUIObjects(view, R.id.home_screen_tile_places);
+                callbackListener.setUIObjects(view, R.id.home_screen_tile_info);
 
             }else{
+                //The normal big tiles containing individual events
                 view = inflater.inflate(R.layout.home_current_event_item, null);
 
                 int actualPosition = position - 1;

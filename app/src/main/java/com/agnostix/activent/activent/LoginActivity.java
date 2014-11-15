@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +32,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -49,15 +51,16 @@ import java.util.Random;
  * https://developers.google.com/+/mobile/android/getting-started#step_1_enable_the_google_api
  * and follow the steps in "Step 1" to create an OAuth 2.0 client for your package.
  */
-public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends PlusBaseActivity{
 
     public static final String EXTRA_LOGIN_USERNAME = "activent.login.username";
 
-    int[] backgrounds = new int[]{R.drawable.login_bg_1, R.drawable.login_bg_2, R.drawable.login_bg_3, R.drawable.login_bg_4};
+    int[] backgrounds = new int[]{
+            R.drawable.login_bg_1, R.drawable.login_bg_2,
+            R.drawable.login_bg_3, R.drawable.login_bg_4};
 
 
     // UI references.
-
     private View mProgressView;
     private SignInButton mPlusSignInButton;
 
@@ -96,6 +99,21 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         }
 
         mProgressView = findViewById(R.id.login_progress);
+
+    }
+
+    public void onStart(){
+        super.onStart();
+
+        Intent receivedIntent = getIntent();
+        if (receivedIntent!=null){
+            if(receivedIntent.hasExtra(HomeScreen.EXTRA_SIGN_OUT)){
+                Log.d("LoginActivity", "Received the sign out intent");
+                signOut();
+            }else{
+                Log.d("LoginActivity", "No intent");
+            }
+        }
     }
 
     /**
@@ -144,13 +162,13 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
                 signOut();
             }
         });*/
-        Button disconnectButton = (Button) findViewById(R.id.plus_disconnect_button);
+        /*Button disconnectButton = (Button) findViewById(R.id.plus_disconnect_button);
         disconnectButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 revokeAccess();
             }
-        });
+        });*/
     }
 
     @Override
@@ -160,10 +178,8 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
     @Override
     protected void updateConnectButtonState() {
-        //TODO: Update this logic to also handle the user logged in by email.
         boolean connected = getPlusClient().isConnected();
 
-        //mSignOutButtons.setVisibility(connected ? View.VISIBLE : View.GONE);
         mPlusSignInButton.setVisibility(connected ? View.GONE : View.VISIBLE);
         //mEmailLoginFormView.setVisibility(connected ? View.GONE : View.VISIBLE);
         if(connected){
@@ -177,11 +193,11 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     protected void onPlusClientRevokeAccess() {
         // TODO: Access to the user's G+ account has been revoked.  Per the developer terms, delete
         // any stored user data here.
+        Toast.makeText(getApplicationContext(), "Account Access revoked!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onPlusClientSignOut() {
-
     }
 
     /**
@@ -194,51 +210,4 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         return GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) ==
                 ConnectionResult.SUCCESS;
     }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE},
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<String>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
 }
-
-
-
