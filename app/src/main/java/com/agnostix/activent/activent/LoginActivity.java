@@ -64,14 +64,13 @@ public class LoginActivity extends PlusBaseActivity{
     private View mProgressView;
     private SignInButton mPlusSignInButton;
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-
-        //setTheme(R.style.TransparentActionBarTheme);
+        actionBar.hide();
         setContentView(R.layout.activity_login);
 
 
@@ -198,8 +197,10 @@ public class LoginActivity extends PlusBaseActivity{
         if(connected){
             Intent intent = new Intent(this, HomeScreen.class);
             intent.putExtra(EXTRA_LOGIN_USERNAME, getPlusClient().getAccountName());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            this.finish();
         }
     }
 

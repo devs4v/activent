@@ -2,6 +2,13 @@ package com.agnostix.activent.activent;
 
 import java.util.Locale;
 
+import android.animation.AnimatorSet;
+import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -16,34 +23,36 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
 public class PlacesActivity extends ActionBarActivity implements ActionBar.TabListener {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     ViewPager mViewPager;
+    Context activityContext;
+
+    private TextView fillText;
+    private ImageView fillProgress;
+    private View levelsBox;
+    private ProgressBar loadingSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places);
 
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -60,6 +69,8 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
             @Override
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);
+
+
             }
         });
 
@@ -114,10 +125,105 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
+    public void onStart(){
+        super.onStart();
+        new getPlacesLevelTask().execute();
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment){
+        super.onAttachFragment(fragment);
+        Activity activity = fragment.getActivity();
+        fillText = (TextView)activity.findViewById(R.id.places_seats_available);
+        fillProgress = (ImageView)activity.findViewById(R.id.places_progress);
+        levelsBox = activity.findViewById(R.id.places_level);
+        loadingSpinner = (ProgressBar)activity.findViewById(R.id.places_wait_progress);
+    }
+    private class getPlacesLevelTask extends AsyncTask<Void, Void, int[]>{
+
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        @Override
+        protected void onPreExecute(){
+            //ProgressBar loadingSpinner = (ProgressBar)findViewById(R.id.places_wait_progress);
+            loadingSpinner.setVisibility(View.VISIBLE);
+            View fillBox = findViewById(R.id.places_level);
+            fillBox.setAlpha(0f);
+            fillBox.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected int[] doInBackground(Void... params) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            int[] levels = new int[]{32, 180};
+
+            return levels;
+        }
+
+        @Override
+        protected void onPostExecute(int[] levels){
+            hideProgressShowLevels(levels);
+        }
+
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        private void hideProgressShowLevels(int[] levels) {
+            final int fillLevel = levels[0];
+            int totalLevel = levels[1];
+
+            final int FADE_IN_DURATION = 500;
+            final int SHOW_PROGRESS_DURATION = 1000;
+
+            AnimatorSet animations = new AnimatorSet();
+
+            AnimatorSet fadeInObjects = new AnimatorSet();
+            ValueAnimator fadeInAnimator = ValueAnimator.ofFloat(0f, 1f);
+            fadeInAnimator.setDuration(FADE_IN_DURATION);
+            fadeInAnimator.setInterpolator(new DecelerateInterpolator());
+            fadeInAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    Float value = (Float)animation.getAnimatedValue();
+                    levelsBox.setAlpha(value.floatValue());
+                }
+            });
+            fadeInObjects.playSequentially(fadeInAnimator);
+
+            AnimatorSet animateLevels = new AnimatorSet();
+            ValueAnimator textAnimator = ValueAnimator.ofInt(0, fillLevel);
+            textAnimator.setDuration(SHOW_PROGRESS_DURATION);
+            textAnimator.setInterpolator(new BounceInterpolator());
+            textAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    Integer value = (Integer)animation.getAnimatedValue();
+                    fillText.setText(value.intValue());
+                }
+            });
+            ValueAnimator progressAnimator = ValueAnimator.ofInt(0, ((fillLevel*10000)/totalLevel));
+            progressAnimator.setDuration(SHOW_PROGRESS_DURATION);
+            progressAnimator.setInterpolator(new BounceInterpolator());
+            progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    Integer value = (Integer)animation.getAnimatedValue();
+                    fillProgress.setImageLevel(value);
+                }
+            });
+            animateLevels.playTogether(textAnimator, progressAnimator);
+
+
+            animations.playSequentially(fadeInObjects, animateLevels);
+
+            loadingSpinner.setVisibility(View.GONE);
+            animations.start();
+        }
+    }
+
+
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -181,6 +287,8 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_places, container, false);
+            ImageView progress = (ImageView)rootView.findViewById(R.id.places_progress);
+            progress.setImageLevel(0);
             return rootView;
         }
     }

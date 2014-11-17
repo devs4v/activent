@@ -35,6 +35,8 @@ public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.H
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
         this.receivedUsername = getIntent().getStringExtra(LoginActivity.EXTRA_LOGIN_USERNAME);
 
