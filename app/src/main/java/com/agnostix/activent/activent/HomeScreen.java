@@ -64,19 +64,23 @@ public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.H
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
+        Intent intent;
         switch (id) {
             case R.id.action_settings:
                 return true;
             case R.id.action_events:
-                Intent intent = new Intent(getApplicationContext(), EventListActivity.class);
+                intent = new Intent(getApplicationContext(), EventListActivity.class);
                 startActivity(intent);
                 break;
             case R.id.action_sign:
-                Intent intent1 = new Intent(getApplicationContext(), LoginActivity.class);
-                intent1.putExtra(EXTRA_SIGN_OUT, "sign_out");
-                startActivity(intent1);
+                intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.putExtra(EXTRA_SIGN_OUT, "sign_out");
+                startActivity(intent);
                 this.finish();
+                break;
+            case R.id.action_emails:
+                intent = new Intent(getApplicationContext(), Mails.class);
+                startActivity(intent);
                 break;
         }
 

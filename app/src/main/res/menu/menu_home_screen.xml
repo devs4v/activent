@@ -10,6 +10,10 @@
         android:orderInCategory="60"
         android:icon="@drawable/tile_agenda"
         app:showAsAction="never"/>
+    <item android:id="@+id/action_emails"
+        android:title="Check Emails"
+        android:icon="@drawable/tile_agenda"
+        app:showAsAction="never"/>
     <item android:id="@+id/action_sign"
         android:title="Sign out"
         android:orderInCategory="100"

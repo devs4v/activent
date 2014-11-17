@@ -10,6 +10,7 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.PlusClient;
 
 
@@ -33,6 +34,8 @@ public abstract class PlusBaseActivity extends ActionBarActivity
 
     // This is the helper object that connects to Google Play Services.
     private PlusClient mPlusClient;
+
+    //private GoogleApiClient googleClient;
 
     // The saved result from {@link #onConnectionFailed(ConnectionResult)}.  If a connection
     // attempt has been made, this is non-null.
@@ -71,6 +74,8 @@ public abstract class PlusBaseActivity extends ActionBarActivity
     protected abstract void updateConnectButtonState();
 
 
+    private static final String GMAIL_READONLY = "https://www.googleapis.com/auth/gmail.readonly";
+
     protected void setPendingSignOut(){
         pendingSignOut = true;
     }
@@ -83,7 +88,8 @@ public abstract class PlusBaseActivity extends ActionBarActivity
         // Scopes indicate the information about the user your application will be able to access.
         mPlusClient =
                 new PlusClient.Builder(this, this, this).setScopes(Scopes.PLUS_LOGIN,
-                        Scopes.PLUS_ME).build();
+                        Scopes.PLUS_ME, GMAIL_READONLY).build();
+
     }
 
     /**
@@ -120,10 +126,7 @@ public abstract class PlusBaseActivity extends ActionBarActivity
             mPlusClient.connect();
         }
 
-        if(pendingSignOut){
-            signOut();
-            pendingSignOut = false;
-        }
+
     }
 
     /**
@@ -140,17 +143,8 @@ public abstract class PlusBaseActivity extends ActionBarActivity
      * Sign out the user (so they can switch to another account).
      */
     public void signOut() {
-
-        // We only want to sign out if we're connected.
-
         if (mPlusClient.isConnected()) {
-            // Clear the default account in order to allow the user to potentially choose a
-            // different account from the account chooser.
             mPlusClient.clearDefaultAccount();
-
-            Log.d("Plus Base", "cleared default account");
-            // Disconnect from Google Play Services, then reconnect in order to restart the
-            // process from scratch.
             initiatePlusClientDisconnect();
 
             Log.v(TAG, "Sign out successful!");
@@ -252,9 +246,19 @@ public abstract class PlusBaseActivity extends ActionBarActivity
      */
     @Override
     public void onConnected(Bundle connectionHint) {
+        if(pendingSignOut){
+            signOut();
+            pendingSignOut = false;
+        }
         updateConnectButtonState();
         setProgressBarVisible(false);
         onPlusClientSignIn();
+
+        if(connectionHint!= null) {
+            Log.d("Connected google plus", "bundle contains:" + connectionHint.toString());
+        }else{
+            Log.d("Connect GP", "bundle is null");
+        }
     }
 
     /**

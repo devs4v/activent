@@ -195,12 +195,12 @@ public class LoginActivity extends PlusBaseActivity{
 
         mPlusSignInButton.setVisibility(connected ? View.GONE : View.VISIBLE);
         //mEmailLoginFormView.setVisibility(connected ? View.GONE : View.VISIBLE);
-        /*if(connected){
+        if(connected){
             Intent intent = new Intent(this, HomeScreen.class);
             intent.putExtra(EXTRA_LOGIN_USERNAME, getPlusClient().getAccountName());
             startActivity(intent);
             this.finish();
-        }*/
+        }
     }
 
     @Override

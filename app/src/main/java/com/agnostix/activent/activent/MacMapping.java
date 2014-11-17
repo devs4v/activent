@@ -8,6 +8,7 @@ import android.provider.BaseColumns;
 public abstract class MacMapping {
 
     public static final String[][] macMap = new String[][]{
+
             //Academic Block
             {"28:94:0f:d6:d8:3d", "Glass Room", "Academic Block"},
             {"c4:64:13:11:42:17", "CDX", "Academic Block"},
