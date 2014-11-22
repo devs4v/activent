@@ -1,5 +1,6 @@
 package com.agnostix.activent.activent;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,9 +38,14 @@ public class Mails extends PlusBaseActivity {
     private Gmail mailService;
     private String authToken;
     private static final int CHECK_VALID_TOKEN = 1993;
+    Context activityContext;
 
     private static final String GMAIL_SCOPE = "oauth2:https://www.googleapis.com/auth/gmail.modify";
     private static final String APP_NAME = "Activent";
+
+    private boolean getPendingMessages = false;
+    private boolean getPendingSingleMessage = false;
+    private String pendingSingleMessageID;
 
     @Override
     protected void onPlusClientRevokeAccess() {
@@ -76,6 +82,7 @@ public class Mails extends PlusBaseActivity {
         setContentView(R.layout.activity_mails);
 
         accountName = "shivamone@gmail.com";
+        activityContext = this;
     }
 
 
@@ -120,6 +127,12 @@ public class Mails extends PlusBaseActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
+                PrefHelper prefHelper = new PrefHelper(activityContext);
+                String username = prefHelper.getValueOrDefault(PrefHelper.PREF_USERNAME, "none");
+                if(username.equals("none")){
+                    Toast.makeText(activityContext, "No user logged in!", Toast.LENGTH_SHORT).show();
+                    return null;
+                }
                 authToken = GoogleAuthUtil.getToken(getApplicationContext(),
                         getPlusClient().getAccountName(), GMAIL_SCOPE);
 
@@ -127,6 +140,7 @@ public class Mails extends PlusBaseActivity {
                 startActivityForResult(e.getIntent(), 1);
                 try {
                     GoogleAuthUtil.clearToken(getApplicationContext(), authToken);
+                    new getAuthTokenTask().execute();
                 } catch (GoogleAuthException e1) {
                     e1.printStackTrace();
                 } catch (IOException e1) {
@@ -138,6 +152,18 @@ public class Mails extends PlusBaseActivity {
                 e.printStackTrace();
             }
             return null;
+        }
+        @Override
+        protected void onPostExecute(Void v){
+            if(getPendingMessages){
+                new getMessagesTask().execute();
+                getPendingMessages = false;
+            }
+            if(getPendingSingleMessage){
+                new getSingleMessageTask().execute(pendingSingleMessageID);
+                getPendingSingleMessage = false;
+                pendingSingleMessageID = null;
+            }
         }
     }
 
@@ -160,6 +186,8 @@ public class Mails extends PlusBaseActivity {
             try {
                 if(authToken == null){
                     new getAuthTokenTask().execute();
+                    getPendingMessages = true;
+                    return null;
                 }
                 GoogleCredential credential = new GoogleCredential()
                         .setAccessToken(authToken);
@@ -188,6 +216,9 @@ public class Mails extends PlusBaseActivity {
                 }
 
 
+                if(emails == null){
+                    return null;
+                }
                 for(Message thisEmail: emails){
                     ArrayList<String> message = new ArrayList<String>();
 
@@ -245,7 +276,9 @@ public class Mails extends PlusBaseActivity {
             /*for(String message: messages){
                 Log.d("Gmail Message", "Gmail Message:" + message);
             }*/
-
+            if(messages == null){
+                return;
+            }
             ListView listView = (ListView)findViewById(R.id.mails_list);
             listView.setAdapter(new EmailListAdapter(getApplicationContext(), messages));
 
@@ -257,15 +290,6 @@ public class Mails extends PlusBaseActivity {
                     new getSingleMessageTask().execute(threadId);
                 }
             });
-            /*ClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TextView threadIdText = (TextView)v.findViewById(R.id.email_item_thread_id);
-                    String threadId = threadIdText.getText().toString();
-                    new getSingleMessageTask().execute(threadId);
-
-                }
-            });*/
         }
     }
 
@@ -276,6 +300,8 @@ public class Mails extends PlusBaseActivity {
             try {
                 if(authToken == null){
                     new getAuthTokenTask().execute();
+                    getPendingSingleMessage = true;
+                    pendingSingleMessageID = params[0];
                 }
                 String threadID = params[0];
                 GoogleCredential credential = new GoogleCredential()

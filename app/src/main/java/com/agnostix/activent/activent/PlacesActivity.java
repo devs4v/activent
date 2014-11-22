@@ -1,6 +1,9 @@
 package com.agnostix.activent.activent;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import android.animation.Animator;
@@ -19,6 +22,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,18 +39,18 @@ import android.widget.Toast;
 
 public class PlacesActivity extends ActionBarActivity implements ActionBar.TabListener {
 
-    SectionsPagerAdapter mSectionsPagerAdapter;
-    ViewPager mViewPager;
-    Context activityContext;
-    int sectionNumber;
-    ArrayList<Integer> fragmentTags;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
+    private int sectionNumber;
 
     private TextView fillText;
     private TextView fillTotal;
     private ImageView fillProgress;
     private View levelsBox;
-    private ProgressBar loadingSpinner;
+    private View loadingSpinner;
     private int[][] showLevels;
+
+    private long lastRefreshed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,15 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
             @Override
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);
+
+                //int position = tab.getPosition();
+                sectionNumber = position;
+                Toast.makeText(getApplicationContext(), "on page: " + position, Toast.LENGTH_SHORT).show();
+                long timeDiff = 5 * 1000;//5 * 60 * 1000;    //5 minutes
+                if(System.currentTimeMillis() - lastRefreshed >= timeDiff){
+                    showLevels = null;
+                }
+                setUiVarsOnPageChange();
             }
         });
 
@@ -120,11 +133,6 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
         mViewPager.setCurrentItem(tab.getPosition());
-
-        int position = tab.getPosition();
-        sectionNumber = position;
-        Toast.makeText(getApplicationContext(), "on page: " + position, Toast.LENGTH_SHORT).show();
-        setUiVarsOnPageChange();
     }
 
     @Override
@@ -138,6 +146,7 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
     public void onStart(){
         super.onStart();
         //new getPlacesLevelTask().execute();
+        mViewPager.setCurrentItem(0, true);
     }
 
     @Override
@@ -148,11 +157,18 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
     private void setUiVarsOnPageChange(){
 
         //Activity activity = this;
-        fillText = (TextView)findViewById(R.id.places_seats_available);
-        fillTotal = (TextView)findViewById(R.id.places_seats_total);
-        fillProgress = (ImageView)findViewById(R.id.places_progress);
-        levelsBox = findViewById(R.id.places_level);
-        loadingSpinner = (ProgressBar)findViewById(R.id.places_wait_progress);
+        //Log.d("VarsChange", (sectionNumber==null)?"nope":String.valueOf(sectionNumber));
+        //List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        SectionsPagerAdapter pagerAdapter = (SectionsPagerAdapter)mViewPager.getAdapter();
+        PlaceholderFragment fragment = (PlaceholderFragment)pagerAdapter.getFragment(sectionNumber);
+
+        View currentView = fragment.getFragView();
+
+        fillText = (TextView)currentView.findViewById(R.id.places_seats_available);
+        fillTotal = (TextView)currentView.findViewById(R.id.places_seats_total);
+        fillProgress = (ImageView)currentView.findViewById(R.id.places_progress);
+        levelsBox = currentView.findViewById(R.id.places_level);
+        loadingSpinner = currentView.findViewById(R.id.places_wait_progress);
 
         if(showLevels != null){
             hideProgressShowLevels();
@@ -170,8 +186,8 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
         final int fillLevel = showLevels[sectionNumber][0];
         int totalLevel = showLevels[sectionNumber][1];
 
-        final int FADE_IN_DURATION = 500;
-        final int SHOW_PROGRESS_DURATION = 1000;
+        final int FADE_IN_DURATION = 1000;
+        final int SHOW_PROGRESS_DURATION = 500;
 
         AnimatorSet animations = new AnimatorSet();
 
@@ -191,7 +207,7 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
         AnimatorSet animateLevels = new AnimatorSet();
         ValueAnimator textAnimator = ValueAnimator.ofInt(0, fillLevel);
         textAnimator.setDuration(SHOW_PROGRESS_DURATION);
-        textAnimator.setInterpolator(new BounceInterpolator());
+        textAnimator.setInterpolator(new DecelerateInterpolator());
         textAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -201,7 +217,7 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
         });
         ValueAnimator progressAnimator = ValueAnimator.ofInt(0, ((fillLevel*10000)/totalLevel));
         progressAnimator.setDuration(SHOW_PROGRESS_DURATION);
-        progressAnimator.setInterpolator(new BounceInterpolator());
+        progressAnimator.setInterpolator(new DecelerateInterpolator());
         progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -212,21 +228,21 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
         animateLevels.playTogether(textAnimator, progressAnimator);
 
 
-        animations.playSequentially(fadeInObjects, animateLevels);
+        animations.playTogether(fadeInObjects, animateLevels);
 
         fillTotal.setText(String.valueOf(totalLevel));
         loadingSpinner.setVisibility(View.GONE);
-        levelsBox.setVisibility(View.VISIBLE);
         levelsBox.setAlpha(0f);
+        levelsBox.setVisibility(View.VISIBLE);
         animations.start();
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void showProgressHideLevels(){
-        /*loadingSpinner.setVisibility(View.VISIBLE);
+        loadingSpinner.setVisibility(View.VISIBLE);
         //View fillBox = findViewById(R.id.places_level);
         levelsBox.setAlpha(0f);
-        levelsBox.setVisibility(View.VISIBLE);*/
+        levelsBox.setVisibility(View.VISIBLE);
     }
 
     private class getPlacesLevelTask extends AsyncTask<Void, Void, int[][]>{
@@ -253,6 +269,7 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
         protected void onPostExecute(int[][] levels){
             showLevels = levels;
             hideProgressShowLevels();
+            lastRefreshed = System.currentTimeMillis();
         }
 
     }
@@ -295,7 +312,11 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
         @Override
         public CharSequence getPageTitle(int position) {
             Locale l = Locale.getDefault();
-            return fragmentList[position][F_TITLE];
+            return fragmentList[position][F_TITLE].toUpperCase(l);
+        }
+
+        public Fragment getFragment(int position){
+            return fragments.get(position);
         }
     }
 
@@ -308,7 +329,7 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
-
+        private View view;
         public static PlaceholderFragment newInstance(int sectionNumber){
             PlaceholderFragment fragment = new PlaceholderFragment();
 
@@ -334,7 +355,12 @@ public class PlacesActivity extends ActionBarActivity implements ActionBar.TabLi
             fillProgress = (ImageView)rootView.findViewById(R.id.places_progress);
             levelsBox = rootView.findViewById(R.id.places_level);
             loadingSpinner = (ProgressBar)rootView.findViewById(R.id.places_wait_progress);*/
+            this.view = rootView;
             return rootView;
+        }
+
+        public View getFragView(){
+            return view;
         }
     }
 
