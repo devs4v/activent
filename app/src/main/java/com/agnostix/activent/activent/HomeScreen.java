@@ -38,7 +38,8 @@ public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.H
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
-        this.receivedUsername = getIntent().getStringExtra(LoginActivity.EXTRA_LOGIN_USERNAME);
+        PrefHelper prefHelper = new PrefHelper(this);
+        this.receivedUsername = prefHelper.getValueOrDefault(PrefHelper.PREF_USERNAME, "none");
 
         ListView listView = (ListView)findViewById(R.id.home_screen_listing);
         HomeScreenAdapter homeScreenAdapter = new HomeScreenAdapter(this, HomeScreen.this, null);

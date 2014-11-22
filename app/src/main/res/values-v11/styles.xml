@@ -2,7 +2,6 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:textViewStyle">@style/activent_serif_light</item>
     </style>
 
 </resources>

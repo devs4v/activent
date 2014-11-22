@@ -99,23 +99,21 @@ public class LoginActivity extends PlusBaseActivity{
 
         mProgressView = findViewById(R.id.login_progress);
 
+        //In case that this activity was launched as a result of a sign out
         Intent receivedIntent = getIntent();
         if (receivedIntent!=null){
-            if(receivedIntent.hasExtra(HomeScreen.EXTRA_SIGN_OUT)){
-                Log.d("LoginActivity", "Received the sign out intent");
+            if(receivedIntent.hasExtra(HomeScreen.EXTRA_SIGN_OUT)) {
                 setPendingSignOut();
-            }else{
-                Log.d("LoginActivity", "No intent");
             }
         }
 
-        Button signOutButton = (Button)findViewById(R.id.sign_out_button);
+        /*Button signOutButton = (Button)findViewById(R.id.sign_out_button);
         signOutButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 signOut();
             }
-        });
+        });*/
     }
 
     public void onStart(){
@@ -166,21 +164,8 @@ public class LoginActivity extends PlusBaseActivity{
 
     @Override
     protected void onPlusClientSignIn() {
-        //Set up sign out and disconnect buttons.
-        /*Button signOutButton = (Button) findViewById(R.id.plus_sign_out_button);
-        signOutButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signOut();
-            }
-        });*/
-        /*Button disconnectButton = (Button) findViewById(R.id.plus_disconnect_button);
-        disconnectButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                revokeAccess();
-            }
-        });*/
+        PrefHelper prefHelper = new PrefHelper(this);
+        prefHelper.putValueFor(PrefHelper.PREF_USERNAME, getPlusClient().getAccountName());
     }
 
     @Override
@@ -213,6 +198,7 @@ public class LoginActivity extends PlusBaseActivity{
 
     @Override
     protected void onPlusClientSignOut() {
+
         Toast.makeText(getApplicationContext(), "Account sign out!", Toast.LENGTH_SHORT).show();
     }
 

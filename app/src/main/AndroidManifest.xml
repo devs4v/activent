@@ -50,7 +50,6 @@
         <activity
             android:name="com.agnostix.activent.activent.LoginActivity"
             android:label="@string/app_name"
-            android:theme="@style/TransparentActionBarTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
