@@ -5,6 +5,8 @@
     <uses-feature android:name="android.hardware.wifi" />
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- To access Google+ APIs: -->
@@ -78,6 +80,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.agnostix.activent.activent.HomeScreen" />
         </activity>
+
+        <receiver android:name=".WifiChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.wifi.supplicant.STATE_CHANGE"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -24,9 +24,12 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
+import com.google.api.services.gmail.model.MessagePart;
 import com.google.api.services.gmail.model.MessagePartHeader;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +109,7 @@ public class Mails extends PlusBaseActivity {
         }
         if(id == R.id.action_mails_refresh){
             Toast.makeText(getApplicationContext(), "Refreshing...", Toast.LENGTH_SHORT).show();
+            authToken = null;
             new getMessagesTask().execute();
 
         }
@@ -130,6 +134,7 @@ public class Mails extends PlusBaseActivity {
                 PrefHelper prefHelper = new PrefHelper(activityContext);
                 String username = prefHelper.getValueOrDefault(PrefHelper.PREF_USERNAME, "none");
                 if(username.equals("none")){
+                    Log.d("authtoken", username + " is  null");
                     Toast.makeText(activityContext, "No user logged in!", Toast.LENGTH_SHORT).show();
                     return null;
                 }
@@ -140,6 +145,7 @@ public class Mails extends PlusBaseActivity {
                 startActivityForResult(e.getIntent(), 1);
                 try {
                     GoogleAuthUtil.clearToken(getApplicationContext(), authToken);
+                    Log.d("getAuthToken", "authtoken task failed!");
                     new getAuthTokenTask().execute();
                 } catch (GoogleAuthException e1) {
                     e1.printStackTrace();
@@ -199,10 +205,6 @@ public class Mails extends PlusBaseActivity {
                 List<Message> emails = null;
                 ArrayList<String> labelIDs = new ArrayList<String>();
                 labelIDs.add("INBOX");
-                labelIDs.add("CATEGORY_UPDATES");
-                labelIDs.add("CATEGORY_SOCIAL");
-                labelIDs.add("CATEGORY_PROMOTIONS");
-                labelIDs.add("CATEGORY_FORUMS");
                 try {
                     messagesResponse = mailService.users().messages()
                             .list("me")
@@ -217,6 +219,7 @@ public class Mails extends PlusBaseActivity {
 
 
                 if(emails == null){
+                    Log.d("message task", "no emails");
                     return null;
                 }
                 for(Message thisEmail: emails){
@@ -313,14 +316,11 @@ public class Mails extends PlusBaseActivity {
                 //ListMessagesResponse threadsResponse;
                 Message response = null;
                 try {
-                    //threadsResponse = mailService.users().messages().list("me")
-                    //        .execute();
                     response = mailService.users().messages()
                             .get("me", threadID)
                             .setFormat("full")
                             .setFields("id,payload,snippet,threadId")
                             .execute();
-                    //threads = threadsResponse.getMessages();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -341,7 +341,26 @@ public class Mails extends PlusBaseActivity {
                 sb.append("Subject: " + subjectHeader + "\n");
 
                 String message = sb.toString();
-                return message;
+
+
+                StringBuffer messageBody = new StringBuffer();
+                if(response.getPayload().getBody().getSize() > 0) {
+                    messageBody.append(response.getPayload().getBody().decodeData());
+
+                }else{
+                    List<MessagePart> messageParts = response.getPayload().getParts();
+                    int i=0;
+                    for(MessagePart part: messageParts){
+                        Log.d("message_body", "Part " + i++ + part.getBody().decodeData().toString());
+                        messageBody.append(part.getBody().decodeData().toString());
+                    }
+
+                }
+
+                //CharBuffer messageCharBuffer = messageBodyBytes.asCharBuffer();
+                //messageBody = messageCharBuffer.toString();
+
+                return messageBody.toString();
             } catch (Exception e) {
                 e.printStackTrace();
             }

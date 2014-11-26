@@ -25,25 +25,24 @@ public class WifiChangeReceiver extends BroadcastReceiver {
     private static DBHelper dbCon;
     private static String lastMAC = null;
 
-    public static String[] getMacAddress(Context context, Intent intent){
+    public static String[] getMacAddress(Context context){
         String[] pInfo = new String[5];
-        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(intent != null) {
-            if (!intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-                return null;
-            }
-        }
 
         WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         if(wifiInfo == null){
+            Log.d("wifi_change_receiver", "Wifi info is null");
             return null;
         }
 
         String macAddress = wifiInfo.getBSSID();
         if(macAddress == null){
+            Log.d("wifi_change_receiver", "mac_address is null");
             return null;
         }
+
+        //cut off the last digit
+        macAddress = macAddress.substring(0, macAddress.length()-1);
 
         dbCon = new DBHelper(context);
         String[] placeInfo = dbCon.getPlaceFromMac(macAddress);
@@ -59,9 +58,10 @@ public class WifiChangeReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Toast.makeText(context, "AP changed!", Toast.LENGTH_SHORT);
 
-        String[] placeInfo = getMacAddress(context, intent);
+        String[] placeInfo = getMacAddress(context);
 
         String macAddress = placeInfo[4];
+        Log.d("Wifi_receiver", "got a new mac address:" + macAddress);
         if(lastMAC == null){
             lastMAC = macAddress;
         }else{
@@ -93,6 +93,6 @@ public class WifiChangeReceiver extends BroadcastReceiver {
 
         notificationManager.notify(NOTIF_ID, notificationBuilder.build());
         Vibrator vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.vibrate(1000);
+        vibrator.vibrate(500);
     }
 }

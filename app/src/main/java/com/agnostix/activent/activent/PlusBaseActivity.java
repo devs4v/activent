@@ -74,7 +74,7 @@ public abstract class PlusBaseActivity extends ActionBarActivity
     protected abstract void updateConnectButtonState();
 
 
-    private static final String GMAIL_READONLY = "https://www.googleapis.com/auth/gmail.readonly";
+    private static final String GMAIL_READONLY = "https://www.googleapis.com/auth/gmail.modify";
 
     protected void setPendingSignOut(){
         pendingSignOut = true;
@@ -87,8 +87,7 @@ public abstract class PlusBaseActivity extends ActionBarActivity
         // Initialize the PlusClient connection.
         // Scopes indicate the information about the user your application will be able to access.
         mPlusClient =
-                new PlusClient.Builder(this, this, this).setScopes(Scopes.PLUS_LOGIN,
-                        Scopes.PLUS_ME, GMAIL_READONLY).build();
+                new PlusClient.Builder(this, this, this).setScopes(GMAIL_READONLY).build();
 
     }
 

@@ -45,9 +45,9 @@ public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.H
         HomeScreenAdapter homeScreenAdapter = new HomeScreenAdapter(this, HomeScreen.this, null);
         listView.setAdapter(homeScreenAdapter);
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        registerReceiver(wifiChangeReceiver, filter);
+        /*IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.wifi.supplicant.STATE_CHANGE");
+        registerReceiver(wifiChangeReceiver, filter);*/
     }
 
 
