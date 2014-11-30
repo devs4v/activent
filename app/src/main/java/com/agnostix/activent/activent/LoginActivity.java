@@ -52,7 +52,7 @@ import java.util.Random;
  * and follow the steps in "Step 1" to create an OAuth 2.0 client for your package.
  */
 public class LoginActivity extends PlusBaseActivity{
-
+static String mEmail=null;
     public static final String EXTRA_LOGIN_USERNAME = "activent.login.username";
 
     int[] backgrounds = new int[]{
@@ -166,6 +166,8 @@ public class LoginActivity extends PlusBaseActivity{
     protected void onPlusClientSignIn() {
         PrefHelper prefHelper = new PrefHelper(this);
         prefHelper.putValueFor(PrefHelper.PREF_USERNAME, getPlusClient().getAccountName());
+        mEmail=getPlusClient().getAccountName();
+
     }
 
     @Override

@@ -21,7 +21,7 @@ import android.widget.Toast;
 public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.HomeScreenItemClickListener{
 
     public static final String EXTRA_SIGN_OUT = "activent.login.sign.out";
-
+Alarm a;
     WifiChangeReceiver wifiChangeReceiver = new WifiChangeReceiver();
     private String receivedUsername;
     private Button hello_button;
@@ -30,10 +30,19 @@ public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.H
     private View tile_places;
     private View tile_info;
 
+    protected void onDestroy(){
+        unregisterReceiver(a);
+        super.onDestroy();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+a=new Alarm();
+        this.registerReceiver(a,new IntentFilter("android.intent.action.TIME_TICK"));
+a.SetAlarm(getApplicationContext());
+
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
@@ -103,7 +112,7 @@ public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.H
     public void onHomeScreenItemClick(View v, int resid) {
         switch(resid){
             case R.id.hello_button:
-                String[] placeInfo = WifiChangeReceiver.getMacAddress(this, null);
+                String[] placeInfo = WifiChangeReceiver.getMacAddress(this);
 
                 ((Button)v).setText(placeInfo[4] + "has " + placeInfo[2]);
                 //Intent intent = new Intent(getApplicationContext(), EventListActivity.class);
@@ -120,7 +129,7 @@ public class HomeScreen extends ActionBarActivity implements HomeScreenAdapter.H
                 this.hello_button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String[] placeInfo = WifiChangeReceiver.getMacAddress(getApplicationContext(), null);
+                        String[] placeInfo = WifiChangeReceiver.getMacAddress(getApplicationContext());
                         ((Button)v).setText(placeInfo[4] + "has " + placeInfo[2]);
                     }
                 });

@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /**
  * Created by Shivam on 11/11/2014.
  */
@@ -207,5 +209,45 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         return activityEntry;
+    }
+
+
+    public ArrayList<String[]> getAllActivityEntries(int numResults){
+        ArrayList<String[]> activityList = new ArrayList<String[]>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] projection = {
+                eventEntry.C_TITLE,
+                eventEntry.C_DAY,
+                eventEntry.C_START_TIME,
+                eventEntry.C_END_TIME,
+                eventEntry.C_PLACE,
+                eventEntry.C_THREAD_ID
+        };
+
+        Cursor cursor = db.query(
+                macAddressEntry.TABLE_NAME,
+                projection,
+                null, null,
+                null, null,
+                null,
+                String.valueOf(numResults)
+        );
+
+
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()){
+            String[] activityEntry = new String[6];
+            activityEntry[eventEntry.C_TITLE_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(eventEntry.C_TITLE));
+            activityEntry[eventEntry.C_DAY_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(eventEntry.C_DAY));
+            activityEntry[eventEntry.C_START_TIME_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(eventEntry.C_START_TIME));
+            activityEntry[eventEntry.C_END_TIME_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(eventEntry.C_END_TIME));
+            activityEntry[eventEntry.C_PLACE_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(eventEntry.C_PLACE));
+            activityEntry[eventEntry.C_THREAD_ID_INDEX] = cursor.getString(cursor.getColumnIndexOrThrow(eventEntry.C_THREAD_ID));
+            activityList.add(activityEntry);
+        }
+
+        return activityList;
     }
 }
